@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+   name: nginx-dns
+   labels:
+     name: nginx-dns
+spec: 
+  replicas: 3
+  selector:
+    matchLabels:
+      name: nginx-dns
+  template: 
+    metadata: 
+      labels:
+        name: nginx-dns
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+    
+      subdomain: default-subdomain
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-dns
+spec:
+  selector:
+    name: nginx-dns
+  clusterIP: None
+  ports:
+  - port: 8080
+    targetPort: 8080
